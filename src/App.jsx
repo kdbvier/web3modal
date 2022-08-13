@@ -18,14 +18,12 @@ const App = () => {
     // <Web3ReactProvider getLibrary={getLibrary}>
     <WalletWeb3Provider>
       <ThemeProvider theme={LightTheme}>
-        <Suspense fallback={<Loader />}>
-          <Header />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Home />} exact />
-            </Routes>
-          </BrowserRouter>
-        </Suspense>
+        <Header />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} exact />
+          </Routes>
+        </BrowserRouter>
       </ThemeProvider>
     </WalletWeb3Provider>
     // </Web3ReactProvider>
