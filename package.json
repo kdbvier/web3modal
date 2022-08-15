@@ -25,6 +25,9 @@
     "react-tooltip": "^4.2.21",
     "styled-component": "^2.8.0",
     "styled-components": "^5.3.5",
+    "graphql": "^15.5.0",
+    "react-infinite-scroll-component": "^6.1.0",
+    "graphql-request": "^3.4.0",
     "web3modal": "^1.9.8"
   },
   "scripts": {
