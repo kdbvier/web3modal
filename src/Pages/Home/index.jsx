@@ -14,34 +14,47 @@ const Home = () => {
   const [address, setAddress] = useState("");
   const [tokenId, setTokenId] = useState("");
   const [nftAssets, setNftAssets] = useState([]);
+  const [next, setNext] = useState('')
   const [hasMore, setHasMore] = useState(true);
   useEffect(() => {
     async function getAssets() {
-      // const assets = await axios.get("https://api.opensea.io/api/v1/assets");
-      const assets = mockdata;
+      const {data:{assets, next}}= await axios.get("https://api.opensea.io/api/v1/assets?limit=12");
+      // const assets = mockdata;
       // const assets = await fetchNftData();
-      setNftAssets(assets.slice(0, 12));
-      console.log("assets: ", assets);
+      setNext(next);
+      setNftAssets(assets);
+      // console.log("assets: ", assets);
     }
 
     getAssets();
   }, []);
-  console.log("nftAssets: ", nftAssets);
   const handleClick = async () => {
-    const assets = await axios.get(`https://api.opensea.io/api/v1/assets`, {
-      params: {
-        asset_contract_address: address,
-        token_ids: tokenId,
-      },
+    let params = {}
+    if(address) params.asset_contract_address = address;
+    if(tokenId) params.token_ids = tokenId;
+    params.limit=12;
+    const {data:{assets, next}} = await axios.get(`https://api.opensea.io/api/v1/assets`, {
+      params: params,
     });
+    setNext(next);
     setNftAssets(assets);
   };
   const getMoreNfts = async () => {
-    console.log("getMore");
-    const assets = mockdata;
-    const newAssets = assets.slice(nftAssets.length, nftAssets.length + 12);
-    setNftAssets(nftAssets.concat(newAssets));
+    let params = {}
+    if(address) params.asset_contract_address = address;
+    if(tokenId) params.token_ids = tokenId;
+    params.limit=12;
+    if(next) {
+      params.cursor = next;
+      const response = await axios.get(`https://api.opensea.io/api/v1/assets`, {
+      params: params,
+    });
+    setNext(response.data.next)
+    setNftAssets(nftAssets.concat(response.data.assets))
+    }
   };
+  console.log('hasMore: ', hasMore)
+
   return (
     <Container>
       <Stack direction="row" spacing={2}>
@@ -66,7 +79,7 @@ const Home = () => {
           Find
         </Button>
       </Stack>
-      <InfiniteScroll dataLength={40} next={getMoreNfts} hasMore={hasMore}>
+      <InfiniteScroll dataLength={nftAssets.length} next={getMoreNfts} hasMore={hasMore}>
         <Grid container spacing={2} marginTop="20px">
           {nftAssets.map((nft, index) => (
             <Grid item md={3} key={index}>
