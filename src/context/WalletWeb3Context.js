@@ -7,7 +7,7 @@ import Web3Modal from "web3modal";
 
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { ethers } from "ethers";
-import { mainnetNetwork as chainConfig } from "../utils/constants";
+import { mainnetNetwork as chainConfig, infuraId } from "../utils/constants";
 // import { useDispatch } from "react-redux";
 // //
 // const injected = new InjectedConnector({ supportedChainIds: [43114] })
@@ -57,13 +57,13 @@ export const WalletWeb3Provider = ({ children }) => {
         injected: {
           package: WalletConnectProvider,
           options: {
-            infuraId: "4fd0ec96b78b4f3e936c7f9719914e9a",
+            infuraId: infuraId,
           },
         },
         walletconnect: {
           package: WalletConnectProvider,
           options: {
-            infuraId: "4fd0ec96b78b4f3e936c7f9719914e9a",
+            infuraId: infuraId,
           },
         },
       },
